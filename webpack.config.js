@@ -12,7 +12,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const GasPlugin = require('gas-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const webpack = require('webpack');
-const TerserPlugin = require('terser-webpack-plugin');
 
 const getSrcPath = (filePath) => {
   const src = path.resolve(__dirname, 'src');
@@ -22,34 +21,17 @@ const getSrcPath = (filePath) => {
 module.exports = {
   mode: 'production',
   context: __dirname,
-  entry: getSrcPath('/index.js'),
+  entry: getSrcPath('/index.ts'),
   output: {
     filename: `code.js`,
     path: path.resolve(__dirname, 'dist'),
     clean: true,
   },
   resolve: {
-    extensions: ['.js'],
+    extensions: ['.js', '.ts'],
   },
   optimization: {
-    minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        test: /\.js$/i,
-        extractComments: false,
-        terserOptions: {
-          ecma: 2020,
-          compress: true,
-          mangle: {
-            reserved: ['global'],
-            keep_fnames: true, // Easier debugging in the browser
-          },
-          format: {
-            comments: /@customfunction/i,
-          },
-        },
-      }),
-    ],
+    minimize: false,
   },
   performance: {
     hints: false,
@@ -71,11 +53,19 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.ts$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
     ],
   },
   plugins: [
     new ESLintPlugin(),
     new webpack.ProgressPlugin(),
+    // new webpack.ProvidePlugin({
+    //   utils: 'utils',
+    // }),
     new CopyWebpackPlugin({
       patterns: [
         {
@@ -99,9 +89,6 @@ module.exports = {
         },
       ],
     }),
-    new GasPlugin({
-      comments: false,
-      source: 'digitalinspiration.com',
-    }),
+    new GasPlugin(),
   ],
 };

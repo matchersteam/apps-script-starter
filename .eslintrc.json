@@ -1,16 +1,25 @@
 {
   "root": true,
-  "parser": "@babel/eslint-parser",
-  "plugins": ["html", "prettier", "googleappsscript"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "html",
+    "prettier",
+    "googleappsscript",
+    "@typescript-eslint"
+  ],
   "extends": [
     "airbnb-base",
     "eslint:recommended",
     "plugin:prettier/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
-    "plugin:jest/recommended"
+    "plugin:jest/recommended",
+    "plugin:import/typescript",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
   ],
   "parserOptions": {
+    "requireConfigFile": false,
     "ecmaFeatures": {
       "jsx": true
     },
@@ -24,12 +33,35 @@
     "jest": true,
     "googleappsscript/googleappsscript": true
   },
-  "ignorePatterns": ["node_modules/"],
+  "ignorePatterns": [
+    "node_modules/"
+  ],
   "globals": {
     "OAuth1": true,
     "OAuth2": true
   },
   "rules": {
+    "no-param-reassign": [
+      "error",
+      {
+        "props": false
+      }
+    ],
+    "camelcase": [
+      "error",
+      {
+        "allow": [
+          "^test_",
+          "^cron_",
+          "^user_",
+          "^dates_",
+          "questionnaires_",
+          "exec_",
+          "^trigger_"
+        ]
+      }
+    ],
+    "import/prefer-default-export": "off",
     "prettier/prettier": [
       "error",
       {
@@ -40,7 +72,19 @@
       }
     ],
     "no-await-in-loop": "off",
-    "import/prefer-default-export": "off",
+    "no-console": "off",
+    "no-plusplus": [
+      "error",
+      {
+        "allowForLoopAfterthoughts": true
+      }
+    ],
+    "no-underscore-dangle": [
+      "error",
+      {
+        "allowAfterThis": true
+      }
+    ],
     "no-unused-vars": [
       1,
       {
@@ -48,6 +92,21 @@
         "argsIgnorePattern": "res|next|^err|^ignore|^_",
         "caughtErrors": "none"
       }
-    ]
+    ],
+    "no-use-before-define": [
+      "error",
+      {
+        "functions": false,
+        "classes": false
+      }
+    ],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "ts": "never"
+      }
+   ]
   }
 }

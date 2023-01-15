@@ -34,6 +34,34 @@ pnpm push
 
 Note : Le code sera compilé dans le dossier dist avant d'être déployé sur le script.
 
+## Tester son code
+
+Les tests sont effectués pas Jest
+
+```bash
+pnpm test
+```
+
+Seul le code sans dépendance avec Gas peut être testé par Jest :
+
+- Exemple sans dépendance avec Gas
+
+```js
+const hasCpuTime = () => !(Date.now() - START_TIME > ONE_MINUTE * 4);
+```
+
+- Exemple non testable
+
+```js
+function notTestable() {
+    Logger.log("notTestable"); // <-- Google Apps Script function. Not callable in dev
+    SpreadsheetApp.getUi(); // <-- Google Apps Script function. Not callable in dev
+    ...
+}
+```
+
+Note : [jest 'expects'](https://jestjs.io/docs/expect)
+
 ### .claspignore
 
 The `.claspignore` file allows you to specify file and directories that you do not wish to not upload to your Google Apps Script project via `clasp push`.
